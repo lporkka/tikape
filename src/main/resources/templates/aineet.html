@@ -12,7 +12,6 @@ and open the template in the editor.
     </head>
     <body>
         <h1>Raaka-aineet</h1>
-        <br/>
         <ul>
             <li th:each="arvo : ${aineet}">
                 <span th:text="${arvo}">
@@ -27,7 +26,6 @@ and open the template in the editor.
         
         
         <h2>Raaka-aineiden lisäys</h2>
-        <br/>
         <form method="POST" action="/raaka-aineet">
             <input type="text" name="name"/><br/>
             <input type="submit" value="lisää"/>
