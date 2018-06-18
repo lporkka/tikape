@@ -33,11 +33,7 @@ public class Main {
         Spark.get("/raaka-aineet", (req, res) -> {
             HashMap map = new HashMap<>();
             ArrayList<String> aineet = new ArrayList<>();
-            try {
-                aineet = raakaAineet.findAll();
-            } catch (SQLException ex) {
-            }
-            
+                aineet = raakaAineet.findAll();                      
             map.put("aineet", aineet);
             return new ModelAndView(map,"aineet");
         }, new ThymeleafTemplateEngine());
