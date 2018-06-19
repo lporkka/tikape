@@ -13,12 +13,12 @@ import java.util.List;
  *
  * @author tapiiri
  */
-public class AineDao {
+public class DrinkkiDao {
     
     public Integer findKey(String nimi) throws SQLException {    
         try (Connection conn = getConnection();
                 ResultSet rslts = conn.prepareStatement("SELECT id FROM RaakaAine WHERE nimi = " + nimi).executeQuery()) {
-            int key = rslts.getInt(0);
+            Integer key = rslts.getInt(0);
             rslts.close();
             conn.close();
             return key;
@@ -28,7 +28,7 @@ public class AineDao {
     public ArrayList<String> findAll() throws SQLException {
         ArrayList<String> lista = new ArrayList<>();
         try (Connection conn = getConnection();
-                ResultSet rslts = conn.prepareStatement("SELECT nimi FROM RaakaAine").executeQuery()) {
+                ResultSet rslts = conn.prepareStatement("SELECT nimi FROM Drinkki").executeQuery()) {
             
             while (rslts.next()) {
                 lista.add(rslts.getString("nimi"));
@@ -41,7 +41,7 @@ public class AineDao {
     
     public void delete(String nimi) throws SQLException {
         try (Connection conn = getConnection()) {    
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM RaakaAine WHERE nimi = ?");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM Drinkki WHERE nimi = ?");
             stmt.setString(1, nimi);
             stmt.executeUpdate();
             stmt.close();
@@ -52,7 +52,7 @@ public class AineDao {
     
     public void saveOrUpdate(String uusi) throws SQLException {
         try (Connection conn = getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT nimi FROM RaakaAine WHERE nimi = '" + uusi + "'");
+            PreparedStatement stmt = conn.prepareStatement("SELECT nimi FROM Drinkki WHERE nimi = '" + uusi + "'");
             ResultSet rslt = stmt.executeQuery();
             int i = 0;
             while (rslt.next()) {
@@ -60,7 +60,7 @@ public class AineDao {
             }
             rslt.close();
             if (i == 0) {
-                PreparedStatement add = conn.prepareStatement("INSERT INTO RaakaAine (nimi) VALUES (?)");
+                PreparedStatement add = conn.prepareStatement("INSERT INTO Drinkki (nimi) VALUES (?)");
                 add.setString(1, uusi);
                 add.executeUpdate();                
                 add.close();                

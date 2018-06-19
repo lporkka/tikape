@@ -6,11 +6,24 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Drinkkilista - Etusivu</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+        <h1>Drinkkilista</h1>
+        <ul>
+            <li th:each="arvo : ${drinkit}">
+                <a th:href="@{~/drinkkilista/{nimi}(nimi=${arvo})}"><span th:text="${arvo}"/></a>
+            </li>
+        </ul>
+        <br/><br/><br/>    
+        <a href="/raaka-aineet">Raaka-aineiden lisäykseen</a><br/>   
+        <br/><br/><br/>
+        <h2>Luo uusi drinkki</h2>
+        <form method="POST" action="/drinkkilista">
+            <input type="text" name="name"/>
+            <input type="submit" value="lisää"/>
+        </form>
     </body>
 </html>

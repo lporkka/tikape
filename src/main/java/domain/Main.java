@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 import classes.AineDao;
+import classes.DrinkkiDao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,24 @@ public class Main {
             Spark.port(Integer.valueOf(System.getenv("PORT")));
         }
         AineDao raakaAineet = new AineDao();
+        DrinkkiDao drinkit = new DrinkkiDao();
+        
+        Spark.get("/drinkkilista", (req, res) -> {
+            HashMap map = new HashMap<>();
+            ArrayList<String> drinkkilista = new ArrayList<>();
+            drinkkilista = drinkit.findAll();
+            
+            map.put("drinkit", drinkkilista);
+            return new ModelAndView(map,"index");
+        }, new ThymeleafTemplateEngine());
+        
+        
+        
+        Spark.post("/drinkkilista", (req, res) -> {
+           drinkit.saveOrUpdate(req.queryParams("name"));
+           res.redirect("/drinkkilista");
+           return "";
+        });
 
         Spark.get("/raaka-aineet", (req, res) -> {
             HashMap map = new HashMap<>();
