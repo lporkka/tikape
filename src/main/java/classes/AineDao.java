@@ -17,13 +17,24 @@ public class AineDao {
     
     public Integer findKey(String nimi) throws SQLException {    
         try (Connection conn = getConnection();
-                ResultSet rslts = conn.prepareStatement("SELECT id FROM RaakaAine WHERE nimi = " + nimi).executeQuery()) {
-            int key = rslts.getInt(0);
+                ResultSet rslts = conn.prepareStatement("SELECT id FROM RaakaAine WHERE nimi = '" + nimi + "'").executeQuery()) {
+            int key = rslts.getInt(1);
             rslts.close();
             conn.close();
             return key;
             }                  
     }
+    
+    public String findNimi(Integer key) throws SQLException {    
+        try (Connection conn = getConnection();
+                ResultSet rslts = conn.prepareStatement("SELECT nimi FROM RaakaAine WHERE id = " + key).executeQuery()) {
+            String nimi = rslts.toString();
+            rslts.close();
+            conn.close();
+            return nimi;
+            }                  
+    }
+    
 
     public ArrayList<String> findAll() throws SQLException {
         ArrayList<String> lista = new ArrayList<>();

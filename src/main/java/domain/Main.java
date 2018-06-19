@@ -5,6 +5,7 @@
  */
 import classes.AineDao;
 import classes.DrinkkiDao;
+import classes.DrinkkiohjeDao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class Main {
         }
         AineDao raakaAineet = new AineDao();
         DrinkkiDao drinkit = new DrinkkiDao();
+        DrinkkiohjeDao ohjeet = new DrinkkiohjeDao();
         
         Spark.get("/drinkkilista", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -49,6 +51,32 @@ public class Main {
            return "";
         });
 
+        
+        Spark.get("/drinkkilista/:nimi", (req, res) -> {
+            HashMap map = new HashMap<>();
+            Integer drinkkiKey = drinkit.findKey(req.params("nimi"));
+            ArrayList<String> ohjelista = ohjeet.findRaakaAineet(drinkkiKey);
+            ArrayList<String> aineet = raakaAineet.findAll();
+            map.put("ohjeet", ohjelista);
+            map.put("drinkinNimi",req.params("nimi"));
+            map.put("aineet", aineet);
+                       
+            return new ModelAndView(map,"drinkki");
+        }, new ThymeleafTemplateEngine());
+                
+                
+        
+        Spark.post("add/:nimi", (req, res) -> {
+            int drinkkiKey = drinkit.findKey(req.params("nimi"));
+            int aineKey = raakaAineet.findKey(req.queryParams("aine"));
+            String maara = req.queryParams("maara");
+            String ohje = req.queryParams("ohje");
+            ohjeet.yhdista(drinkkiKey, aineKey, maara, ohje);
+            res.redirect("/drinkkilista/" + req.params("nimi"));
+            return "";
+        });
+                
+                
         Spark.get("/raaka-aineet", (req, res) -> {
             HashMap map = new HashMap<>();
             ArrayList<String> aineet = new ArrayList<>();

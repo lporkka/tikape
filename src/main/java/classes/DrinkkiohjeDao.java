@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 package classes;
-
+import classes.AineDao;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -69,21 +68,36 @@ public class DrinkkiohjeDao {
         }
     }
     
-    public void yhdista(Integer drinkkiKey, Integer raakaAineKey, Integer jarjestys, String maara, String ohje) throws SQLException {
+    public void yhdista(Integer drinkkiKey, Integer raakaAineKey, String maara, String ohje) throws SQLException {
         try (Connection conn = getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO DrinkkiRaakaAine (drinkki_id, raakaAine_id, jarjestys, maara, ohje) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO DrinkkiRaakaAine (drinkki_id, raakaAine_id, maara, ohje) VALUES (?, ?, ?, ?)");
             stmt.setInt(1, drinkkiKey);
             stmt.setInt(2, raakaAineKey);
-            stmt.setInt(3, jarjestys);
-            stmt.setString(4, maara);
-            stmt.setString(5, ohje);
+            stmt.setString(3, maara);
+            stmt.setString(4, ohje);
             stmt.executeUpdate();
             stmt.close();
             conn.close();
         }
     }
     
-    public ArrayList<String>
+    public ArrayList<String> findRaakaAineet(Integer drinkkiKey) throws SQLException {
+        AineDao apu = new AineDao();
+        ArrayList<String> ohjeet = new ArrayList<>();
+        try (Connection conn = getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM DrinkkiRaakaAine WHERE drinkki_id = " + drinkkiKey);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String aineNimi = apu.findNimi(rs.getInt("raakaAine_id"));
+                String maara = rs.getString("maara");
+                String ohje = rs.getString("ohje");
+                ohjeet.add(aineNimi + ", " + maara + ", " + ohje);
+            }
+            rs.close();
+            conn.close();
+        }
+        return ohjeet;
+    }
 
     public Connection getConnection() throws SQLException {
         String dbUrl = System.getenv("JDBC_DATABASE_URL");

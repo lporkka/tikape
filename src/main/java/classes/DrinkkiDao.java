@@ -16,10 +16,9 @@ import java.util.List;
 public class DrinkkiDao {
     
     public Integer findKey(String nimi) throws SQLException {    
-        try (Connection conn = getConnection();
-                ResultSet rslts = conn.prepareStatement("SELECT id FROM RaakaAine WHERE nimi = " + nimi).executeQuery()) {
-            Integer key = rslts.getInt(0);
-            rslts.close();
+        try (Connection conn = getConnection()) {
+            ResultSet rslts = conn.prepareStatement("SELECT id FROM Drinkki WHERE nimi = '" + nimi + "'").executeQuery();
+            int key = rslts.getInt("id");
             conn.close();
             return key;
             }                  
