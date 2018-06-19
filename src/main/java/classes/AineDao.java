@@ -29,9 +29,9 @@ public class AineDao {
         ArrayList<String> lista = new ArrayList<>();
         try (Connection conn = getConnection();
                 ResultSet rslts = conn.prepareStatement("SELECT nimi FROM RaakaAine").executeQuery()) {
-
+            
             while (rslts.next()) {
-                lista.add("nimi");
+                lista.add(rslts.getString("nimi"));
             }
             rslts.close();
             conn.close();

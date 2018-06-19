@@ -48,7 +48,7 @@ public class Main {
         });
         
         Spark.post("delete/:nimi", (req, res) -> {
-            raakaAineet.delete(":nimi");            
+            raakaAineet.delete(req.params("nimi"));            
             res.redirect("/raaka-aineet");
             return "";
         });
