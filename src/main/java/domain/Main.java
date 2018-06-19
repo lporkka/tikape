@@ -66,13 +66,13 @@ public class Main {
                 
                 
         
-        Spark.post("add/:nimi", (req, res) -> {
-            int drinkkiKey = drinkit.findKey(req.params("nimi"));
+        Spark.post("/add/:drinkki", (req, res) -> {
+            int drinkkiKey = drinkit.findKey(req.params("drinkki"));
             int aineKey = raakaAineet.findKey(req.queryParams("aine"));
             String maara = req.queryParams("maara");
             String ohje = req.queryParams("ohje");
             ohjeet.yhdista(drinkkiKey, aineKey, maara, ohje);
-            res.redirect("/drinkkilista/" + req.params("nimi"));
+            res.redirect("/drinkkilista/" + req.params("drinkki"));
             return "";
         });
                 
